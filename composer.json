@@ -1,0 +1,38 @@
+{
+    "name": "flaconi/enqueue-rdkafka-serializer-bundle",
+    "description": "Symfony bundle to configure kafka serializer for different client's and transports",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Miehe",
+            "email": "alexander.miehe@flaconi.de"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "enqueue/enqueue-bundle": "^0.9.7",
+        "enqueue/rdkafka": "^0.9.2"
+    },
+    "require-dev": {
+        "doctrine/coding-standard": "^5.0",
+        "phpstan/phpstan": "^0.11.1"
+    },
+    "autoload": {
+        "psr-4": { "Flaconi\\EnqueueRdKafkaSerializerBundle\\": "" }
+    },
+    "autoload-dev": {
+        "psr-4": { "": "Tests/DependencyInjection" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+    "scripts": {
+        "code-style": [
+            "vendor/bin/phpcs",
+            "vendor/bin/phpstan analyse -c phpstan.neon"
+        ]
+    }
+}
