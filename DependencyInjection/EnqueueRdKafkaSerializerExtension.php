@@ -21,4 +21,9 @@ final class EnqueueRdKafkaSerializerExtension extends Extension
 
         $container->setParameter('enqueue_rdkafka_serializer.serializer', $config['serializer']);
     }
+
+    public function getAlias()
+    {
+        return 'enqueue_rdkafka_serializer';
+    }
 }
