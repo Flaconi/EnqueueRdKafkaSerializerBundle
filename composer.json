@@ -38,7 +38,8 @@
         ],
         "tests": [
             "vendor/bin/phpunit --dump-xdebug-filter var/xdebug-filter.php",
-            "vendor/bin/phpunit --prepend var/xdebug-filter.php"
+            "vendor/bin/phpunit --prepend var/xdebug-filter.php",
+            "docker run --rm -v $(pwd):$(pwd) -w $(pwd) jakzal/phpqa:alpine infection --min-msi=100 --min-covered-msi=100 --threads=4 --coverage=var/coverage --only-covered"
         ]
     }
 }

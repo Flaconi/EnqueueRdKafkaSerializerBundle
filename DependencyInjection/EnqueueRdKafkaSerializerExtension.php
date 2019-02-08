@@ -15,7 +15,7 @@ final class EnqueueRdKafkaSerializerExtension extends Extension
     {
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
 
-        if (! array_key_exists('serializer', $config)) {
+        if (! array_key_exists('serializer', $config) || count($config['serializer']) === 0) {
             return;
         }
 

@@ -16,9 +16,9 @@ class KafkaMessageSerializerPassTest extends AbstractCompilerPassTestCase
     {
         $fooSerializer = new Definition(null, [[]]);
 
-        $this->container->setDefinition('app.kafka_message_serializer', $fooSerializer);
+        $this->container->setDefinition('enqueue_rdkafka_serializer.serializer', $fooSerializer);
 
-        $this->container->setParameter('app.kafka_message_serializer', ['foo' => ['serializer' => 'fooSerializer', 'processor' => 'FooProcessor']]);
+        $this->container->setParameter('enqueue_rdkafka_serializer.serializer', ['foo' => ['serializer' => 'fooSerializer', 'processor' => 'FooProcessor']]);
 
         $this->container->setDefinition('enqueue.client.foo.context', new Definition(null, [[]]));
 
@@ -34,27 +34,27 @@ class KafkaMessageSerializerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall('enqueue.transport.foo.context', 'setSerializer', [$fooSerializer]);
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall('fooSerializer', 'setProcessorName', ['FooProcessor']);
 
-        self::assertFalse($this->container->hasParameter('app.kafka_message_serializer'));
+        self::assertFalse($this->container->hasParameter('enqueue_rdkafka_serializer.serializer'));
     }
 
     public function testProcessWithNotExistingContext() : void
     {
         $fooSerializer = new Definition(null, [[]]);
 
-        $this->container->setDefinition('app.kafka_message_serializer', $fooSerializer);
+        $this->container->setDefinition('enqueue_rdkafka_serializer.serializer', $fooSerializer);
 
-        $this->container->setParameter('app.kafka_message_serializer', ['foo' => ['serializer' => 'fooSerializer', 'processor' => 'FooProcessor']]);
+        $this->container->setParameter('enqueue_rdkafka_serializer.serializer', ['foo' => ['serializer' => 'fooSerializer', 'processor' => 'FooProcessor']]);
 
         $this->compile();
 
-        self::assertFalse($this->container->hasParameter('app.kafka_message_serializer'));
+        self::assertFalse($this->container->hasParameter('enqueue_rdkafka_serializer.serializer'));
     }
 
     public function testProcessWithMultipleSerializer() : void
     {
         $fooSerializer = new Definition(null, [[]]);
 
-        $this->container->setDefinition('app.kafka_message_serializer', $fooSerializer);
+        $this->container->setDefinition('enqueue_rdkafka_serializer.serializer', $fooSerializer);
 
         $serializer = [
             'foo' => ['serializer' => 'fooSerializer', 'processor' => 'FooProcessor'],
@@ -62,7 +62,7 @@ class KafkaMessageSerializerPassTest extends AbstractCompilerPassTestCase
             'foo3' => ['serializer' => 'foo3Serializer', 'processor' => 'Foo3Processor'],
         ];
 
-        $this->container->setParameter('app.kafka_message_serializer', $serializer);
+        $this->container->setParameter('enqueue_rdkafka_serializer.serializer', $serializer);
 
         $this->container->setDefinition('enqueue.client.foo.context', new Definition(null, [[]]));
         $this->container->setDefinition('enqueue.client.foo2.context', new Definition(null, [[]]));
@@ -87,14 +87,14 @@ class KafkaMessageSerializerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall('foo3Serializer', 'setProcessorName', ['Foo3Processor']);
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall('enqueue.client.foo3.context', 'setSerializer', [$foo3Serializer]);
 
-        self::assertFalse($this->container->hasParameter('app.kafka_message_serializer'));
+        self::assertFalse($this->container->hasParameter('enqueue_rdkafka_serializer.serializer'));
     }
 
     public function testProcessWithMultipleSerializerOneContextMissing() : void
     {
         $fooSerializer = new Definition(null, [[]]);
 
-        $this->container->setDefinition('app.kafka_message_serializer', $fooSerializer);
+        $this->container->setDefinition('enqueue_rdkafka_serializer.serializer', $fooSerializer);
 
         $serializer = [
             'foo' => ['serializer' => 'fooSerializer', 'processor' => 'FooProcessor'],
@@ -102,7 +102,7 @@ class KafkaMessageSerializerPassTest extends AbstractCompilerPassTestCase
             'foo3' => ['serializer' => 'foo3Serializer', 'processor' => 'Foo3Processor'],
         ];
 
-        $this->container->setParameter('app.kafka_message_serializer', $serializer);
+        $this->container->setParameter('enqueue_rdkafka_serializer.serializer', $serializer);
 
         $this->container->setDefinition('enqueue.client.foo.context', new Definition(null, [[]]));
         $this->container->setDefinition('enqueue.client.foo3.context', new Definition(null, [[]]));
@@ -121,7 +121,7 @@ class KafkaMessageSerializerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall('foo3Serializer', 'setProcessorName', ['Foo3Processor']);
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall('enqueue.client.foo3.context', 'setSerializer', [$foo3Serializer]);
 
-        self::assertFalse($this->container->hasParameter('app.kafka_message_serializer'));
+        self::assertFalse($this->container->hasParameter('enqueue_rdkafka_serializer.serializer'));
     }
 
     /**

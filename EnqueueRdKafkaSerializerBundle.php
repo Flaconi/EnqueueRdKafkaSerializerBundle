@@ -5,6 +5,9 @@ namespace Flaconi\EnqueueRdKafkaSerializerBundle;
 use Flaconi\EnqueueRdKafkaSerializerBundle\DependencyInjection\EnqueueRdKafkaSerializerExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * @codeCoverageIgnore
+ */
 class EnqueueRdKafkaSerializerBundle extends Bundle
 {
     public function getContainerExtension()

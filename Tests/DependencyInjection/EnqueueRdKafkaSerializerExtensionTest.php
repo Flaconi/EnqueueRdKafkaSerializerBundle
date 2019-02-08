@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * @covers \Flaconi\EnqueueRdKafkaSerializerBundle\DependencyInjection\EnqueueRdKafkaSerializerExtension
+ * @covers \Flaconi\EnqueueRdKafkaSerializerBundle\DependencyInjection\Configuration
  */
 class EnqueueRdKafkaSerializerExtensionTest extends AbstractExtensionTestCase
 {
