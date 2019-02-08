@@ -16,7 +16,9 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^5.0",
-        "phpstan/phpstan": "^0.11.1"
+        "phpstan/phpstan": "^0.11.1",
+        "matthiasnoback/symfony-dependency-injection-test": "^3.1",
+        "phpunit/phpunit": "^7.0"
     },
     "autoload": {
         "psr-4": { "Flaconi\\EnqueueRdKafkaSerializerBundle\\": "" }
@@ -33,6 +35,11 @@
         "code-style": [
             "vendor/bin/phpcs",
             "vendor/bin/phpstan analyse -c phpstan.neon.dist"
+        ],
+        "tests": [
+            "vendor/bin/phpunit --dump-xdebug-filter var/xdebug-filter.php",
+            "vendor/bin/phpunit --prepend var/xdebug-filter.php",
+            "docker run --rm -v $(pwd):$(pwd) -w $(pwd) jakzal/phpqa:alpine infection --min-msi=100 --min-covered-msi=100 --threads=4 --coverage=var/coverage --only-covered"
         ]
     }
 }
