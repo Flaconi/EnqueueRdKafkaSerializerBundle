@@ -35,6 +35,10 @@
         "code-style": [
             "vendor/bin/phpcs",
             "vendor/bin/phpstan analyse -c phpstan.neon.dist"
+        ],
+        "tests": [
+            "vendor/bin/phpunit --dump-xdebug-filter var/xdebug-filter.php",
+            "vendor/bin/phpunit --prepend var/xdebug-filter.php"
         ]
     }
 }
