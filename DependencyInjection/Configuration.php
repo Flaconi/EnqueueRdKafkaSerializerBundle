@@ -34,9 +34,9 @@ final class Configuration implements ConfigurationInterface
             return ! is_subclass_of($v, Serializer::class);
         };
         $node
-            ->canBeUnset()
             ->children()
                 ->arrayNode('serializer')
+                ->canBeUnset()
                 ->useAttributeAsKey('name')
                     ->prototype('array')
                     ->children()
