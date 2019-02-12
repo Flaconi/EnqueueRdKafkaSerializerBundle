@@ -7,5 +7,5 @@ parameters:
         - vendor
         - var
     ignoreErrors:
-        - '/Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition\:\:canBeUnset\(\)./'
+        - '/Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition\:\:children\(\)./'
         - '/Parameter #1 $configuration of method Symfony\Component\DependencyInjection\Extension\Extension::processConfiguration() expects Symfony\Component\Config\Definition\ConfigurationInterface, Symfony\Component\Config\Definition\ConfigurationInterface|null given./'
