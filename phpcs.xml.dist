@@ -11,6 +11,7 @@
 
     <file>.</file>
     <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>var/*</exclude-pattern>
 
     <rule ref="Doctrine">
         <exclude name="SlevomatCodingStandard.Classes.ClassConstantVisibility"/>
