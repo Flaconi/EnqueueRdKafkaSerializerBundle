@@ -2,9 +2,11 @@
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\DependencyInjection\CompilerPass;
 
+use Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\AvroSerializer;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use function sprintf;
+use Symfony\Component\DependencyInjection\Definition;
 
 final class KafkaMessageSerializerPass implements CompilerPassInterface
 {
@@ -24,7 +26,18 @@ final class KafkaMessageSerializerPass implements CompilerPassInterface
 
                 $contextService = $container->findDefinition($contextServiceId);
 
-                $serializerDefinition = $container->findDefinition($config['serializer']);
+                $serializerDefinition = null;
+
+                if ($config['serializer'] === AvroSerializer::class && ! $container->hasDefinition($config['serializer'])) {
+                    $serializerDefinition = new Definition($config['serializer']);
+                    $serializerDefinition->setAutowired(true);
+                    $serializerDefinition->setAutoconfigured(true);
+                    $serializerDefinition->setArgument('$schemaName', $config['schema_name']);
+                }
+
+                if ($serializerDefinition === null) {
+                    $serializerDefinition = $container->findDefinition($config['serializer']);
+                }
 
                 $serializerDefinition->addMethodCall('setProcessorName', [$config['processor']]);
 

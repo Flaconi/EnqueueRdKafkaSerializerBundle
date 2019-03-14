@@ -3,6 +3,7 @@
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\DependencyInjection;
 
 use Enqueue\RdKafka\Serializer;
+use Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\AvroSerializer;
 use Interop\Queue\Processor;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -54,6 +55,11 @@ final class Configuration implements ConfigurationInterface
                                 ->thenInvalid('Invalid processor %s')
                             ->end()
                         ->end()
+                        ->scalarNode('schema_name')->end()
+                    ->end()
+                    ->validate()
+                        ->ifTrue(function ($v) { return ($v['serializer'] === AvroSerializer::class) && !isset($v['schema_name']); })
+                        ->thenInvalid('When AvroSerializer is used the schema_name needs to be set')
                     ->end()
                 ->end()
             ->end();
