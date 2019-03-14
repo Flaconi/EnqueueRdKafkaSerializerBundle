@@ -10,56 +10,37 @@ use FlixTech\AvroSerializer\Objects\RecordSerializer;
 use FlixTech\SchemaRegistryApi\Exception\SchemaRegistryException;
 use FlixTech\SchemaRegistryApi\Registry;
 use GuzzleHttp\Promise\PromiseInterface;
+use Psr\Http\Message\ResponseInterface;
 
-/**
- * @author Alexander Miehe <alexander.miehe@flaconi.de>
- */
 final class AvroSerializer implements ProcessorSerializer
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $processorName;
-    /**
-     * @var RecordSerializer
-     */
+    /** @var RecordSerializer */
     private $recordSerializer;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $schemaName;
-    /**
-     * @var Registry
-     */
+    /** @var Registry */
     private $registry;
 
-    public function setProcessorName(string $processorName): void
+    public function setProcessorName(string $processorName) : void
     {
         $this->processorName = $processorName;
     }
 
-    /**
-     * @param RecordSerializer $recordSerializer
-     * @param Registry         $registry
-     * @param string           $schemaName
-     */
     public function __construct(RecordSerializer $recordSerializer, Registry $registry, string $schemaName)
     {
         $this->recordSerializer = $recordSerializer;
-        $this->schemaName = $schemaName;
-        $this->registry = $registry;
+        $this->schemaName       = $schemaName;
+        $this->registry         = $registry;
     }
 
     /**
-     * @param RdKafkaMessage $message
-     *
-     * @return string
-     *
      * @throws SchemaRegistryException
      * @throws Exception
      */
-    public function toString(RdKafkaMessage $message): string
+    public function toString(RdKafkaMessage $message) : string
     {
         $properties = $message->getProperties();
 
@@ -73,13 +54,9 @@ final class AvroSerializer implements ProcessorSerializer
     }
 
     /**
-     * @param string $string
-     *
-     * @return RdKafkaMessage
-     *
      * @throws SchemaRegistryException
      */
-    public function toMessage(string $string): RdKafkaMessage
+    public function toMessage(string $string) : RdKafkaMessage
     {
         $message = new RdKafkaMessage('', $this->recordSerializer->decodeMessage($string));
 
@@ -89,19 +66,17 @@ final class AvroSerializer implements ProcessorSerializer
     }
 
     /**
-     * @param PromiseInterface|\Exception|\Psr\Http\Message\ResponseInterface $response
+     * @param PromiseInterface|Exception|ResponseInterface $response
      *
-     * @return AvroSchema
-     *
-     * @throws \Exception
+     * @throws Exception
      */
-    private function extractValueFromRegistryResponse($response): AvroSchema
+    private function extractValueFromRegistryResponse($response) : AvroSchema
     {
         if ($response instanceof PromiseInterface) {
             $response = $response->wait();
         }
 
-        if ($response instanceof \Exception) {
+        if ($response instanceof Exception) {
             throw $response;
         }
 

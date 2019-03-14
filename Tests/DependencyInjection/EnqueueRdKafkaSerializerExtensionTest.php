@@ -55,7 +55,7 @@ class EnqueueRdKafkaSerializerExtensionTest extends AbstractExtensionTestCase
                 'foo' => [
                     'serializer' => AvroSerializer::class,
                     'processor' => NullProcessor::class,
-                    'schema_name' => 'dummy-value'
+                    'schema_name' => 'dummy-value',
                 ],
             ],
         ];

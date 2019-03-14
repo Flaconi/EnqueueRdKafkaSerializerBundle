@@ -58,7 +58,9 @@ final class Configuration implements ConfigurationInterface
                         ->scalarNode('schema_name')->end()
                     ->end()
                     ->validate()
-                        ->ifTrue(function ($v) { return ($v['serializer'] === AvroSerializer::class) && !isset($v['schema_name']); })
+                        ->ifTrue(static function ($v) {
+                            return ($v['serializer'] === AvroSerializer::class) && ! isset($v['schema_name']);
+                        })
                         ->thenInvalid('When AvroSerializer is used the schema_name needs to be set')
                     ->end()
                 ->end()
