@@ -6,7 +6,7 @@ use Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\AvroSerializer;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use function sprintf;
+use function Safe\sprintf;
 
 final class KafkaMessageSerializerPass implements CompilerPassInterface
 {

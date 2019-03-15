@@ -4,11 +4,12 @@ namespace Flaconi\EnqueueRdKafkaSerializerBundle\Tests\Serializer;
 
 use AvroSchema;
 use Enqueue\RdKafka\RdKafkaMessage;
+use Exception;
 use Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\AvroSerializer;
 use FlixTech\AvroSerializer\Objects\RecordSerializer;
 use FlixTech\SchemaRegistryApi\Registry;
+use GuzzleHttp\Promise\FulfilledPromise;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 
 /**
  * @covers \Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\AvroSerializer
@@ -21,11 +22,26 @@ final class AvroSerializerTest extends TestCase
 
     public function testToString() : void
     {
-        $message = new RdKafkaMessage('', ['foo' => 'bar', 'enqueue.processor' => 'processor'], ['schema_name' => 'foo']);
+        $schema = $this->prophesize(AvroSchema::class);
 
-        $this->recordSerializer->encodeRecord('foo', Argument::type(AvroSchema::class), ['foo' => 'bar'])->willReturn('encoded');
+        $this->registry->latestVersion('schema-name-value')->willReturn(new FulfilledPromise($schema->reveal()));
+
+        $message = new RdKafkaMessage('', ['foo' => 'bar', 'enqueue.processor' => 'processor']);
+
+        $this->recordSerializer->encodeRecord('schema-name-value', $schema->reveal(), ['foo' => 'bar'])->willReturn('encoded');
 
         self::assertEquals('encoded', $this->serializer->toString($message));
+    }
+
+    public function testToStringWithException() : void
+    {
+        $this->registry->latestVersion('schema-name-value')->willReturn(new Exception());
+
+        $message = new RdKafkaMessage('', ['foo' => 'bar', 'enqueue.processor' => 'processor']);
+
+        $this->expectException(Exception::class);
+
+        $this->serializer->toString($message);
     }
 
     public function testToMessage() : void

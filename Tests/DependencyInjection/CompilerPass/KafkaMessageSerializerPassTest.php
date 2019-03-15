@@ -3,9 +3,11 @@
 namespace App\Tests\DependencyInjection\CompilerPass;
 
 use Flaconi\EnqueueRdKafkaSerializerBundle\DependencyInjection\CompilerPass\KafkaMessageSerializerPass;
+use Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\AvroSerializer;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use function var_dump;
 
 /**
  * @covers \Flaconi\EnqueueRdKafkaSerializerBundle\DependencyInjection\CompilerPass\KafkaMessageSerializerPass
@@ -33,6 +35,31 @@ class KafkaMessageSerializerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall('enqueue.client.foo.context', 'setSerializer', [$fooSerializer]);
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall('enqueue.transport.foo.context', 'setSerializer', [$fooSerializer]);
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall('fooSerializer', 'setProcessorName', ['FooProcessor']);
+
+        self::assertFalse($this->container->hasParameter('enqueue_rdkafka_serializer.serializer'));
+    }
+
+    public function testProcessWithAvroSerializer() : void
+    {
+        $this->container->setParameter('enqueue_rdkafka_serializer.serializer', ['foo' => ['serializer' => AvroSerializer::class, 'processor' => 'FooProcessor', 'schema_name' => 'bar']]);
+
+        $client = new Definition(null, [[]]);
+        $transport = new Definition(null, [[]]);
+
+        $this->container->setDefinition('enqueue.client.foo.context', $client);
+
+        $this->container->setDefinition('enqueue.transport.foo.context', $transport);
+
+        $fooSerializer = new Definition(AvroSerializer::class);
+        $fooSerializer->setArgument('$schemaName', 'bar');
+        $fooSerializer->setAutoconfigured(true);
+        $fooSerializer->setAutowired(true);
+        $fooSerializer->addMethodCall('setProcessorName', ['FooProcessor']);
+
+        $this->compile();
+
+        self::assertEquals($fooSerializer, $client->getMethodCalls()[0][1][0]);
+        self::assertEquals($fooSerializer, $transport->getMethodCalls()[0][1][0]);
 
         self::assertFalse($this->container->hasParameter('enqueue_rdkafka_serializer.serializer'));
     }

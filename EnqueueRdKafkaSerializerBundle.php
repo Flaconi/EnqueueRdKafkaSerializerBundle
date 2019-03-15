@@ -10,14 +10,14 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 /**
  * @codeCoverageIgnore
  */
-class EnqueueRdKafkaSerializerBundle extends Bundle
+final class EnqueueRdKafkaSerializerBundle extends Bundle
 {
     public function getContainerExtension()
     {
         return new EnqueueRdKafkaSerializerExtension();
     }
 
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container) : void
     {
         $container->addCompilerPass(new KafkaMessageSerializerPass());
     }
