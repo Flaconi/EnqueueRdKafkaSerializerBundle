@@ -51,4 +51,8 @@
         <exclude-pattern>Twig/DoctrineExtension.php</exclude-pattern>
         <exclude-pattern>Tests/*</exclude-pattern>
     </rule>
+
+    <rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingPropertyTypeHint">
+            <exclude-pattern>Tests/*</exclude-pattern>
+        </rule>
 </ruleset>

@@ -1,4 +1,15 @@
+includes:
+    - vendor/jangregor/phpstan-prophecy/src/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/localheinz/phpstan-rules/rules.neon
+    - vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon
 parameters:
+    classesAllowedToBeExtended:
+        - Symfony\Component\HttpKernel\Bundle\Bundle
+        - Symfony\Component\DependencyInjection\Extension\Extension
     level: 7
     paths:
         - %currentWorkingDirectory%
