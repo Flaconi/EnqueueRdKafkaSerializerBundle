@@ -27,10 +27,12 @@
         "phpstan/phpstan-strict-rules": "^0.11.0",
         "localheinz/phpstan-rules": "^0.7.1",
         "jangregor/phpstan-prophecy": "^0.3.0",
-        "infection/infection": "^0.12.2"
+        "infection/infection": "^0.12.2",
+        "symfony/serializer": "^4.2"
     },
     "suggest": {
-        "flix-tech/avro-serde-php": "When you want to use AvroSerializer"
+        "flix-tech/avro-serde-php": "When you want to use AvroSerializer",
+        "symfony/serializer": "When you want to use JsonSerializer"
     },
     "autoload": {
         "psr-4": { "Flaconi\\EnqueueRdKafkaSerializerBundle\\": "" }
