@@ -7,35 +7,22 @@ use Enqueue\RdKafka\RdKafkaMessage;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Encoder\EncoderInterface;
 
-/**
- * @author Alexander Miehe <alexander.miehe@flaconi.de>
- */
 final class JsonSerializer implements ProcessorSerializer
 {
-    /**
-     * @var DecoderInterface
-     */
+    /** @var DecoderInterface */
     private $decoder;
 
-    /**
-     * @var EncoderInterface
-     */
+    /** @var EncoderInterface */
     private $encoder;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $processorName;
 
-    public function setProcessorName(string $processorName): void
+    public function setProcessorName(string $processorName) : void
     {
         $this->processorName = $processorName;
     }
 
-    /**
-     * @param DecoderInterface $decoder
-     * @param EncoderInterface $encoder
-     */
     public function __construct(DecoderInterface $decoder, EncoderInterface $encoder)
     {
         $this->decoder = $decoder;
@@ -45,19 +32,19 @@ final class JsonSerializer implements ProcessorSerializer
     /**
      * @inheritDoc
      */
-    public function toString(RdKafkaMessage $message): string
+    public function toString(RdKafkaMessage $message) : string
     {
         $properties = $message->getProperties();
 
         unset($properties[Config::PROCESSOR]);
-        
+
         return (string) $this->encoder->encode($properties, 'json');
     }
 
     /**
      * @inheritDoc
      */
-    public function toMessage(string $string): RdKafkaMessage
+    public function toMessage(string $string) : RdKafkaMessage
     {
         $message = new RdKafkaMessage('', $this->decoder->decode($string, 'json'));
 
