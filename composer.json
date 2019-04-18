@@ -16,7 +16,7 @@
         "thecodingmachine/safe": "^0.1.14"
     },
     "require-dev": {
-        "doctrine/coding-standard": "^5.0",
+        "flaconi/coding-standard": "^3.0",
         "phpstan/phpstan": "^0.11.1",
         "matthiasnoback/symfony-dependency-injection-test": "^3.1",
         "phpunit/phpunit": "^7.0",
@@ -32,7 +32,8 @@
     },
     "suggest": {
         "flix-tech/avro-serde-php": "When you want to use AvroSerializer",
-        "symfony/serializer": "When you want to use JsonSerializer"
+        "symfony/serializer": "When you want to use JsonSerializer",
+        "brick/math": "When you want to use BigDecimalConverterExtension in your tests"
     },
     "autoload": {
         "psr-4": { "Flaconi\\EnqueueRdKafkaSerializerBundle\\": "" }
