@@ -31,6 +31,22 @@ class EnqueueRdKafkaSerializerExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasParameter('enqueue_rdkafka_serializer.serializer', $config['serializer']);
     }
 
+    public function testExtensionsAfterLoading() : void
+    {
+        $config = [
+            'extensions' => [
+                'big_decimal_converter' => [
+                    'format' => 'foobar',
+                    'context' => ['name'],
+                ],
+            ],
+        ];
+
+        $this->load($config);
+
+        $this->assertContainerBuilderHasParameter('enqueue_rdkafka_serializer.serializer', $config['serializer']);
+    }
+
     public function testErrorAfterLoadingForAvroSerializerWithoutSchema() : void
     {
         $config = [
