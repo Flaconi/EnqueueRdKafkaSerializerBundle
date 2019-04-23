@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\Tests\Serializer;
 
@@ -10,6 +12,7 @@ use FlixTech\AvroSerializer\Objects\RecordSerializer;
 use FlixTech\SchemaRegistryApi\Registry;
 use GuzzleHttp\Promise\FulfilledPromise;
 use PHPUnit\Framework\TestCase;
+use Throwable;
 
 /**
  * @covers \Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\AvroSerializer
@@ -35,11 +38,12 @@ final class AvroSerializerTest extends TestCase
 
     public function testToStringWithException() : void
     {
-        $this->registry->latestVersion('schema-name-value')->willReturn(new Exception());
+        $this->registry->latestVersion('schema-name-value')->willReturn(new Exception('dummy'));
 
         $message = new RdKafkaMessage('', ['foo' => 'bar', 'enqueue.processor' => 'processor']);
 
-        $this->expectException(Exception::class);
+        $this->expectException(Throwable::class);
+        $this->expectExceptionMessage('dummy');
 
         $this->serializer->toString($message);
     }

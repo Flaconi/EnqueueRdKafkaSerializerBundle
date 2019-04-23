@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\Tests\DependencyInjection;
 
@@ -8,7 +10,10 @@ use Interop\Queue\Processor;
 
 class NullProcessor implements Processor
 {
-    public function process(Message $message, Context $context)
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
+     */
+    public function process(Message $message, Context $context) : void
     {
     }
 }

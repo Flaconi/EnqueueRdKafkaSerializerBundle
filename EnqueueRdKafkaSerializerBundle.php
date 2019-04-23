@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle;
 
@@ -12,7 +14,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 final class EnqueueRdKafkaSerializerBundle extends Bundle
 {
-    public function getContainerExtension()
+    public function getContainerExtension() : EnqueueRdKafkaSerializerExtension
     {
         return new EnqueueRdKafkaSerializerExtension();
     }

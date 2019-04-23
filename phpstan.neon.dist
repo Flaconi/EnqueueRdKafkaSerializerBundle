@@ -18,5 +18,5 @@ parameters:
         - vendor
         - var
     ignoreErrors:
-        - '/Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition\:\:children\(\)./'
-        - '/Parameter #1 $configuration of method Symfony\Component\DependencyInjection\Extension\Extension::processConfiguration() expects Symfony\Component\Config\Definition\ConfigurationInterface, Symfony\Component\Config\Definition\ConfigurationInterface|null given./'
+        - '/Cannot call method arrayNode() on Symfony\\Component\\Config\\Definition\\Builder\\NodeParentInterface|null./'
+        - '/Only booleans are allowed in a negated boolean, array<bool|string> given./'

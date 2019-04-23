@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\Serializer;
 
@@ -29,9 +31,6 @@ final class JsonSerializer implements ProcessorSerializer
         $this->encoder = $encoder;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function toString(RdKafkaMessage $message) : string
     {
         $properties = $message->getProperties();
@@ -41,9 +40,6 @@ final class JsonSerializer implements ProcessorSerializer
         return (string) $this->encoder->encode($properties, 'json');
     }
 
-    /**
-     * @inheritDoc
-     */
     public function toMessage(string $string) : RdKafkaMessage
     {
         $message = new RdKafkaMessage('', $this->decoder->decode($string, 'json'));
