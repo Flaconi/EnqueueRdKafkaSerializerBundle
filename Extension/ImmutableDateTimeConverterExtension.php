@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\Extension;
 
@@ -24,9 +26,6 @@ final class ImmutableDateTimeConverterExtension implements MessageReceivedExtens
         $this->format                = $format;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function onMessageReceived(MessageReceived $context) : void
     {
         $message = $context->getMessage();
@@ -41,7 +40,7 @@ final class ImmutableDateTimeConverterExtension implements MessageReceivedExtens
             $datetime = DateTimeImmutable::createFromFormat(
                 $this->format,
                 $value['date'],
-                new DateTimeZone($value['timezone'])
+                new DateTimeZone($value['timezone']),
             );
             $message->setProperty($convertibleProperty, $datetime);
         }

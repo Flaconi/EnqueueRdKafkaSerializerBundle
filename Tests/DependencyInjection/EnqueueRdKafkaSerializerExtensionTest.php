@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\Tests\DependencyInjection;
 
@@ -82,6 +84,9 @@ class EnqueueRdKafkaSerializerExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithTag($serviceId, 'enqueue.transport.consumption_extension', ['transport' => 'name']);
     }
 
+    /**
+     * @return array<array<string>>
+     */
     public function getExtensions() : array
     {
         return [
@@ -134,7 +139,7 @@ class EnqueueRdKafkaSerializerExtensionTest extends AbstractExtensionTestCase
     }
 
     /**
-     * @return ExtensionInterface[]
+     * @return array<ExtensionInterface>
      */
     protected function getContainerExtensions() : array
     {

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\DependencyInjection;
 
@@ -7,6 +9,7 @@ use Flaconi\EnqueueRdKafkaSerializerBundle\Extension\ImmutableDateTimeConverterE
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use function array_key_exists;
+use function count;
 
 final class EnqueueRdKafkaSerializerExtension extends Extension
 {
@@ -25,10 +28,18 @@ final class EnqueueRdKafkaSerializerExtension extends Extension
             $config,
             $container,
             'immutable_datetime_converter',
-            ImmutableDateTimeConverterExtension::class
+            ImmutableDateTimeConverterExtension::class,
         );
     }
 
+    public function getAlias() : string
+    {
+        return 'enqueue_rdkafka_serializer';
+    }
+
+    /**
+     * @param array<array<string>> $config
+     */
     private function setSerializer(array $config, ContainerBuilder $container) : void
     {
         if (! array_key_exists('serializer', $config) || count($config['serializer']) === 0) {
@@ -38,12 +49,11 @@ final class EnqueueRdKafkaSerializerExtension extends Extension
         $container->setParameter('enqueue_rdkafka_serializer.serializer', $config['serializer']);
     }
 
-    private function loadExtension(
-        array $config,
-        ContainerBuilder $container,
-        string $extensionName,
-        string $class
-    ) : void {
+    /**
+     * @param array<array<array<array<string|boolean>>>> $config
+     */
+    private function loadExtension(array $config, ContainerBuilder $container, string $extensionName, string $class) : void
+    {
         $extensionConfig = $config['extensions'][$extensionName];
 
         if (! $extensionConfig['enabled'] || count($extensionConfig['context']) === 0) {
@@ -57,10 +67,5 @@ final class EnqueueRdKafkaSerializerExtension extends Extension
             $extension->addTag('enqueue.consumption_extension', ['client' => $name]);
             $extension->addTag('enqueue.transport.consumption_extension', ['transport' => $name]);
         }
-    }
-
-    public function getAlias()
-    {
-        return 'enqueue_rdkafka_serializer';
     }
 }

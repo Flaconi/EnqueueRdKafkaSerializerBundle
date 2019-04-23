@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\Extension;
 
@@ -23,9 +25,6 @@ final class BigDecimalConverterExtension implements MessageReceivedExtensionInte
         $this->format                = $format;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function onMessageReceived(MessageReceived $context) : void
     {
         $message = $context->getMessage();

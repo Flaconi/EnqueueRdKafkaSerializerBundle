@@ -19,3 +19,4 @@ parameters:
         - var
     ignoreErrors:
         - '/Cannot call method arrayNode() on Symfony\\Component\\Config\\Definition\\Builder\\NodeParentInterface|null./'
+        - '/Only booleans are allowed in a negated boolean, array<bool|string> given./'

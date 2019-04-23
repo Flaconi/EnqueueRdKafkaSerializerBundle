@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Flaconi\Tests\EnqueueRdKafkaSerializerBundle\Extension;
 
@@ -27,7 +29,7 @@ class ImmutableDateTimeConverterExtensionTest extends TestCase
             [
                 'foobar' => ['date' => '2018-11-20 12:58:16.000000', 'timezone' => '+00:00'],
                 'dummy' => new DateTimeImmutable('2018-11-22T12:58:16+00:00'),
-            ]
+            ],
         );
 
         $context = new MessageReceived(
@@ -36,7 +38,7 @@ class ImmutableDateTimeConverterExtensionTest extends TestCase
             $msg,
             $this->prophesize(Processor::class)->reveal(),
             0,
-            $this->prophesize(LoggerInterface::class)->reveal()
+            $this->prophesize(LoggerInterface::class)->reveal(),
         );
 
         $extension->onMessageReceived($context);

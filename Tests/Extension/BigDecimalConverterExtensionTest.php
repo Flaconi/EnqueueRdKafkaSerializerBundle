@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Flaconi\Tests\EnqueueRdKafkaSerializerBundle\Extension;
 
 use Brick\Math\BigDecimal;
@@ -29,7 +31,7 @@ class BigDecimalConverterExtensionTest extends TestCase
             $msg,
             $this->prophesize(Processor::class)->reveal(),
             0,
-            $this->prophesize(LoggerInterface::class)->reveal()
+            $this->prophesize(LoggerInterface::class)->reveal(),
         );
 
         $extension->onMessageReceived($context);

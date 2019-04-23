@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\DependencyInjection;
 
@@ -12,9 +14,6 @@ use function is_subclass_of;
 
 final class Configuration implements ConfigurationInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigTreeBuilder() : TreeBuilder
     {
         $treeBuilder = new TreeBuilder('enqueue_rdkafka_serializer');

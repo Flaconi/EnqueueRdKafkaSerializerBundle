@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\Serializer;
 
@@ -49,7 +51,7 @@ final class AvroSerializer implements ProcessorSerializer
         return $this->recordSerializer->encodeRecord(
             $this->schemaName,
             $this->extractValueFromRegistryResponse($this->registry->latestVersion($this->schemaName)),
-            $properties
+            $properties,
         );
     }
 
