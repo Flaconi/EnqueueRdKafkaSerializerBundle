@@ -42,7 +42,7 @@ final class AvroSerializerTest extends TestCase
 
         $message = new RdKafkaMessage('', ['foo' => 'bar', 'enqueue.processor' => 'processor']);
 
-        $this->expectException(Exception::class);
+        $this->expectException(Throwable::class);
         $this->expectExceptionMessage('dummy');
 
         $this->serializer->toString($message);

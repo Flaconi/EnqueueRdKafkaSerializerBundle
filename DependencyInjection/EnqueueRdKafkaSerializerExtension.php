@@ -50,7 +50,7 @@ final class EnqueueRdKafkaSerializerExtension extends Extension
     }
 
     /**
-     * @param array<array<array<array<string|boolean>>>> $config
+     * @param array<array<array<array<(string|bool)>>>> $config
      */
     private function loadExtension(array $config, ContainerBuilder $container, string $extensionName, string $class) : void
     {
