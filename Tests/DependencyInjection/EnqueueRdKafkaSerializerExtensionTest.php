@@ -3,6 +3,8 @@
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\Tests\DependencyInjection;
 
 use Flaconi\EnqueueRdKafkaSerializerBundle\DependencyInjection\EnqueueRdKafkaSerializerExtension;
+use Flaconi\EnqueueRdKafkaSerializerBundle\Extension\BigDecimalConverterExtension;
+use Flaconi\EnqueueRdKafkaSerializerBundle\Extension\ImmutableDateTimeConverterExtension;
 use Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\AvroSerializer;
 use Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\ProcessorSerializer;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
@@ -29,13 +31,41 @@ class EnqueueRdKafkaSerializerExtensionTest extends AbstractExtensionTestCase
         $this->load($config);
 
         $this->assertContainerBuilderHasParameter('enqueue_rdkafka_serializer.serializer', $config['serializer']);
+        $this->assertContainerBuilderNotHasService(BigDecimalConverterExtension::class);
+        $this->assertContainerBuilderNotHasService(ImmutableDateTimeConverterExtension::class);
     }
 
-    public function testExtensionsAfterLoading() : void
+    /**
+     * @dataProvider getExtensions
+     */
+    public function testExtensionsAfterLoadingWithNoContextSet(string $extensionName, string $serviceId) : void
     {
         $config = [
+            'serializer' => false,
             'extensions' => [
-                'big_decimal_converter' => [
+                $extensionName => [
+                    'format' => 'foobar',
+                    'context' => [],
+                ],
+            ],
+        ];
+
+        $this->load($config);
+
+        self::assertFalse($this->container->hasParameter('enqueue_rdkafka_serializer.serializer'));
+
+        $this->assertContainerBuilderNotHasService($serviceId);
+    }
+
+    /**
+     * @dataProvider getExtensions
+     */
+    public function testExtensionsAfterLoading(string $extensionName, string $serviceId) : void
+    {
+        $config = [
+            'serializer' => false,
+            'extensions' => [
+                $extensionName => [
                     'format' => 'foobar',
                     'context' => ['name'],
                 ],
@@ -44,7 +74,20 @@ class EnqueueRdKafkaSerializerExtensionTest extends AbstractExtensionTestCase
 
         $this->load($config);
 
-        $this->assertContainerBuilderHasParameter('enqueue_rdkafka_serializer.serializer', $config['serializer']);
+        self::assertFalse($this->container->hasParameter('enqueue_rdkafka_serializer.serializer'));
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument($serviceId, '$convertibleProperties', []);
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument($serviceId, '$format', 'foobar');
+        $this->assertContainerBuilderHasServiceDefinitionWithTag($serviceId, 'enqueue.consumption_extension', ['client' => 'name']);
+        $this->assertContainerBuilderHasServiceDefinitionWithTag($serviceId, 'enqueue.transport.consumption_extension', ['transport' => 'name']);
+    }
+
+    public function getExtensions() : array
+    {
+        return [
+            ['big_decimal_converter', BigDecimalConverterExtension::class],
+            ['immutable_datetime_converter', ImmutableDateTimeConverterExtension::class],
+        ];
     }
 
     public function testErrorAfterLoadingForAvroSerializerWithoutSchema() : void

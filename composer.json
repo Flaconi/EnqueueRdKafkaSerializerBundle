@@ -28,7 +28,8 @@
         "localheinz/phpstan-rules": "^0.7.1",
         "jangregor/phpstan-prophecy": "^0.3.0",
         "infection/infection": "^0.12.2",
-        "symfony/serializer": "^4.2"
+        "symfony/serializer": "^4.2",
+        "brick/math": "^0.8.7"
     },
     "suggest": {
         "flix-tech/avro-serde-php": "When you want to use AvroSerializer",

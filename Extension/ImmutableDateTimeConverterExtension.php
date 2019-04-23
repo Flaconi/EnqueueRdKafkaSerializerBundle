@@ -12,13 +12,16 @@ final class ImmutableDateTimeConverterExtension implements MessageReceivedExtens
 {
     /** @var array<string> */
     private $convertibleProperties;
+    /** @var string */
+    private $format;
 
     /**
      * @param array<string> $convertibleProperties
      */
-    public function __construct(array $convertibleProperties)
+    public function __construct(array $convertibleProperties, string $format)
     {
         $this->convertibleProperties = $convertibleProperties;
+        $this->format                = $format;
     }
 
     /**
@@ -36,7 +39,7 @@ final class ImmutableDateTimeConverterExtension implements MessageReceivedExtens
             }
 
             $datetime = DateTimeImmutable::createFromFormat(
-                'Y-m-d H:i:s.u',
+                $this->format,
                 $value['date'],
                 new DateTimeZone($value['timezone'])
             );
