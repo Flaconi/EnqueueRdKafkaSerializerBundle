@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\Extension;
 
@@ -12,9 +14,7 @@ abstract class ConverterExtension implements MessageReceivedExtensionInterface
     private $convertibleProperties;
     /** @var string */
     protected $format;
-    /**
-     * @var PropertyAccessor
-     */
+    /** @var PropertyAccessor */
     private $propertyAccessor;
 
     /**
@@ -24,7 +24,7 @@ abstract class ConverterExtension implements MessageReceivedExtensionInterface
     {
         $this->convertibleProperties = $convertibleProperties;
         $this->format                = $format;
-        $this->propertyAccessor = $propertyAccessor;
+        $this->propertyAccessor      = $propertyAccessor;
     }
 
     public function onMessageReceived(MessageReceived $context) : void
@@ -47,16 +47,13 @@ abstract class ConverterExtension implements MessageReceivedExtensionInterface
     }
 
     /**
-     * @param mixed $value
-     *
-     * @return bool
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
      */
-    abstract protected function isConvertible($value): bool;
+    abstract protected function isConvertible($value) : bool;
 
     /**
-     * @param mixed $value
-     *
-     * @return mixed
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
      */
     abstract protected function convert($value);
 }

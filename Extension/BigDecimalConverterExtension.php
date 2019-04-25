@@ -9,12 +9,18 @@ use function Safe\sprintf;
 
 final class BigDecimalConverterExtension extends ConverterExtension
 {
-    protected function isConvertible($value): bool
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+     */
+    protected function isConvertible($value) : bool
     {
         return ! ($value instanceof BigDecimal || $value === null);
     }
 
-    protected function convert($value)
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+     */
+    protected function convert($value) : BigDecimal
     {
         return BigDecimal::of(sprintf($this->format, $value));
     }

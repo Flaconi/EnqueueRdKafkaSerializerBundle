@@ -10,6 +10,7 @@ parameters:
     classesAllowedToBeExtended:
         - Symfony\Component\HttpKernel\Bundle\Bundle
         - Symfony\Component\DependencyInjection\Extension\Extension
+        - Flaconi\EnqueueRdKafkaSerializerBundle\Extension\ConverterExtension
     level: 7
     paths:
         - %currentWorkingDirectory%
@@ -20,3 +21,6 @@ parameters:
     ignoreErrors:
         - '/Cannot call method arrayNode() on Symfony\\Component\\Config\\Definition\\Builder\\NodeParentInterface|null./'
         - '/Only booleans are allowed in a negated boolean, array<bool|string> given./'
+        - '/Method Flaconi\\EnqueueRdKafkaSerializerBundle\\Extension\\.*ConverterExtension::isConvertible\(\) has parameter \$value with no typehint specified./'
+        - '/Method Flaconi\\EnqueueRdKafkaSerializerBundle\\Extension\\.*ConverterExtension::convert\(\) has parameter \$value with no typehint specified./'
+        - '/Method Flaconi\\EnqueueRdKafkaSerializerBundle\\Extension\\.*ConverterExtension::convert\(\) has no return typehint specified./'

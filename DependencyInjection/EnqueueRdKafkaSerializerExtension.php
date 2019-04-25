@@ -9,9 +9,9 @@ use Flaconi\EnqueueRdKafkaSerializerBundle\Extension\ImmutableDateTimeConverterE
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use function array_key_exists;
 use function count;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 final class EnqueueRdKafkaSerializerExtension extends Extension
 {
