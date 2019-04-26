@@ -5,38 +5,23 @@ declare(strict_types=1);
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\Extension;
 
 use Brick\Math\BigDecimal;
-use Enqueue\Consumption\Context\MessageReceived;
-use Enqueue\Consumption\MessageReceivedExtensionInterface;
 use function Safe\sprintf;
 
-final class BigDecimalConverterExtension implements MessageReceivedExtensionInterface
+final class BigDecimalConverterExtension extends ConverterExtension
 {
-    /** @var array<string> */
-    private $convertibleProperties;
-    /** @var string */
-    private $format;
-
     /**
-     * @param array<string> $convertibleProperties
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
      */
-    public function __construct(array $convertibleProperties, string $format)
+    protected function isConvertible($value) : bool
     {
-        $this->convertibleProperties = $convertibleProperties;
-        $this->format                = $format;
+        return ! ($value instanceof BigDecimal || $value === null);
     }
 
-    public function onMessageReceived(MessageReceived $context) : void
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+     */
+    protected function convert($value) : BigDecimal
     {
-        $message = $context->getMessage();
-
-        foreach ($this->convertibleProperties as $convertibleProperty) {
-            $value = $message->getProperty($convertibleProperty);
-
-            if ($value instanceof BigDecimal || $value === null) {
-                continue;
-            }
-
-            $message->setProperty($convertibleProperty, BigDecimal::of(sprintf($this->format, $value)));
-        }
+        return BigDecimal::of(sprintf($this->format, $value));
     }
 }

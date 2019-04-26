@@ -13,15 +13,17 @@ use Interop\Queue\Context;
 use Interop\Queue\Processor;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * @covers \Flaconi\EnqueueRdKafkaSerializerBundle\Extension\BigDecimalConverterExtension
+ * @covers \Flaconi\EnqueueRdKafkaSerializerBundle\Extension\ConverterExtension
  */
 class BigDecimalConverterExtensionTest extends TestCase
 {
     public function testOnMessageReceived() : void
     {
-        $extension = new BigDecimalConverterExtension(['dummy', 'foobar', 'bar_foo' ], '%.4f');
+        $extension = new BigDecimalConverterExtension(['[dummy]', '[foobar]', '[bar_foo]' ], '%.4f', PropertyAccess::createPropertyAccessor());
 
         $msg = new NullMessage('', ['foobar' => 12.0004, 'dummy' => BigDecimal::of(2)]);
 

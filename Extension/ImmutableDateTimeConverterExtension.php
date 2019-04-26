@@ -6,43 +6,28 @@ namespace Flaconi\EnqueueRdKafkaSerializerBundle\Extension;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use Enqueue\Consumption\Context\MessageReceived;
-use Enqueue\Consumption\MessageReceivedExtensionInterface;
 use function is_array;
 
-final class ImmutableDateTimeConverterExtension implements MessageReceivedExtensionInterface
+final class ImmutableDateTimeConverterExtension extends ConverterExtension
 {
-    /** @var array<string> */
-    private $convertibleProperties;
-    /** @var string */
-    private $format;
-
     /**
-     * @param array<string> $convertibleProperties
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
      */
-    public function __construct(array $convertibleProperties, string $format)
+    protected function isConvertible($value) : bool
     {
-        $this->convertibleProperties = $convertibleProperties;
-        $this->format                = $format;
+        return is_array($value);
     }
 
-    public function onMessageReceived(MessageReceived $context) : void
+    /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
+     */
+    protected function convert($value)
     {
-        $message = $context->getMessage();
-
-        foreach ($this->convertibleProperties as $convertibleProperty) {
-            $value = $message->getProperty($convertibleProperty);
-
-            if (! is_array($value)) {
-                continue;
-            }
-
-            $datetime = DateTimeImmutable::createFromFormat(
-                $this->format,
-                $value['date'],
-                new DateTimeZone($value['timezone']),
-            );
-            $message->setProperty($convertibleProperty, $datetime);
-        }
+        return DateTimeImmutable::createFromFormat(
+            $this->format,
+            $value['date'],
+            new DateTimeZone($value['timezone']),
+        );
     }
 }

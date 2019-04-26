@@ -7,7 +7,9 @@ namespace Flaconi\EnqueueRdKafkaSerializerBundle\DependencyInjection;
 use Flaconi\EnqueueRdKafkaSerializerBundle\Extension\BigDecimalConverterExtension;
 use Flaconi\EnqueueRdKafkaSerializerBundle\Extension\ImmutableDateTimeConverterExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use function array_key_exists;
 use function count;
 
@@ -63,6 +65,12 @@ final class EnqueueRdKafkaSerializerExtension extends Extension
         $extension = $container->register($class, $class);
         $extension->setArgument('$convertibleProperties', $extensionConfig['convertibleProperties']);
         $extension->setArgument('$format', $extensionConfig['format']);
+
+        $propertyAccessorDef = new Definition();
+        $propertyAccessorDef->setFactory([PropertyAccess::class, 'createPropertyAccessor']);
+        $propertyAccessorDef->setPublic(false);
+
+        $extension->setArgument('$propertyAccessor', $propertyAccessorDef);
         foreach ($extensionConfig['context'] as $name) {
             $extension->addTag('enqueue.consumption_extension', ['client' => $name]);
             $extension->addTag('enqueue.transport.consumption_extension', ['transport' => $name]);

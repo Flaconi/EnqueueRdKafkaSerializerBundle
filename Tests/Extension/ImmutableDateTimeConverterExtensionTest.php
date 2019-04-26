@@ -13,16 +13,18 @@ use Interop\Queue\Context;
 use Interop\Queue\Processor;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use const DATE_ATOM;
 
 /**
  * @covers \Flaconi\EnqueueRdKafkaSerializerBundle\Extension\ImmutableDateTimeConverterExtension
+ * @covers \Flaconi\EnqueueRdKafkaSerializerBundle\Extension\ConverterExtension
  */
 class ImmutableDateTimeConverterExtensionTest extends TestCase
 {
     public function testOnMessageReceived() : void
     {
-        $extension = new ImmutableDateTimeConverterExtension(['dummy', 'foobar', 'bar_foo'], 'Y-m-d H:i:s.u');
+        $extension = new ImmutableDateTimeConverterExtension(['[dummy]', '[foobar]', '[bar_foo]'], 'Y-m-d H:i:s.u', PropertyAccess::createPropertyAccessor());
 
         $msg = new NullMessage(
             '',

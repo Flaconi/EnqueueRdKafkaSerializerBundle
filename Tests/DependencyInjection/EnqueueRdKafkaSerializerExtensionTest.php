@@ -11,7 +11,9 @@ use Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\AvroSerializer;
 use Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\ProcessorSerializer;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * @covers \Flaconi\EnqueueRdKafkaSerializerBundle\DependencyInjection\EnqueueRdKafkaSerializerExtension
@@ -80,6 +82,7 @@ class EnqueueRdKafkaSerializerExtensionTest extends AbstractExtensionTestCase
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument($serviceId, '$convertibleProperties', []);
         $this->assertContainerBuilderHasServiceDefinitionWithArgument($serviceId, '$format', 'foobar');
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument($serviceId, '$propertyAccessor', (new Definition())->setFactory([PropertyAccess::class, 'createPropertyAccessor'])->setPublic(false));
         $this->assertContainerBuilderHasServiceDefinitionWithTag($serviceId, 'enqueue.consumption_extension', ['client' => 'name']);
         $this->assertContainerBuilderHasServiceDefinitionWithTag($serviceId, 'enqueue.transport.consumption_extension', ['transport' => 'name']);
     }
