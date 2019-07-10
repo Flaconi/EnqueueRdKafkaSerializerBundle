@@ -10,6 +10,7 @@ use Interop\Queue\Processor;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use function array_key_exists;
 use function is_subclass_of;
 
 final class Configuration implements ConfigurationInterface
@@ -66,7 +67,7 @@ final class Configuration implements ConfigurationInterface
                     ->end()
                     ->validate()
                         ->ifTrue(static function ($v) {
-                            return ($v['serializer'] === AvroSerializer::class) && ! isset($v['schema_name']);
+                            return $v['serializer'] === AvroSerializer::class && ! array_key_exists('schema_name', $v);
                         })
                         ->thenInvalid('When AvroSerializer is used the schema_name needs to be set')
                     ->end()
