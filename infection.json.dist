@@ -22,7 +22,13 @@
     "mutators": {
         "@default": true,
         "IdenticalEqual": false,
-        "NotIdenticalNotEqual": false
+        "NotIdenticalNotEqual": false,
+        "Continue_": {
+            "ignore": ["Flaconi\\EnqueueRdKafkaSerializerBundle\\*\\IODatumWriter::transformData"]
+        },
+        "IncrementInteger": {
+            "ignore": ["Flaconi\\EnqueueRdKafkaSerializerBundle\\*\\IODatumWriter::transformLogicalType"]
+        }
     },
     "phpUnit": {
         "customPath": "vendor/bin/phpunit"

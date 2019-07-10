@@ -37,7 +37,8 @@
     "suggest": {
         "flix-tech/avro-serde-php": "When you want to use AvroSerializer",
         "symfony/serializer": "When you want to use JsonSerializer",
-        "brick/math": "When you want to use BigDecimalConverterExtension in your tests"
+        "brick/math": "When you want to use BigDecimalConverterExtension in your tests",
+        "phpseclib/phpseclib": "When you want to use IODatumReader or IODatumWriter with "
     },
     "autoload": {
         "psr-4": { "Flaconi\\EnqueueRdKafkaSerializerBundle\\": "" }
