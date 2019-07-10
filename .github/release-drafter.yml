@@ -1,5 +1,5 @@
-name-template: 'v$NEXT_PATCH_VERSION 🌈'
-tag-template: 'v$NEXT_PATCH_VERSION'
+name-template: 'v$NEXT_MINOR_VERSION 🌈'
+tag-template: 'v$NEXT_MINOR_VERSION'
 categories:
   - title: '🚀 Features'
     labels:
@@ -13,7 +13,8 @@ categories:
   - title: '🧰 Maintenance'
     label: 'chore'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
-branches: 'add-avro-reader-writer'
+branches:
+  - 'add-avro-reader-writer'
 template: |
   ## Changes
 
