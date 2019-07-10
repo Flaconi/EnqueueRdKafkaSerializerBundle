@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\Tests\Avro;
 
-use Flaconi\EnqueueRdKafkaSerializerBundle\Avro\IODatumReader;
 use AvroException;
 use AvroIOBinaryDecoder;
 use AvroIOBinaryEncoder;
@@ -17,6 +16,7 @@ use AvroStringIO;
 use Brick\Math\BigDecimal;
 use DateTimeImmutable;
 use DateTimeZone;
+use Flaconi\EnqueueRdKafkaSerializerBundle\Avro\IODatumReader;
 use PHPUnit\Framework\TestCase;
 use Safe\Exceptions\StringsException;
 use function Safe\hex2bin;

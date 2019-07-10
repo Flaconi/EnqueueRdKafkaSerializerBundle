@@ -16,21 +16,18 @@ use function Widmogrod\Functional\curryN;
 
 final class RecordSerializerFactory
 {
-    public static function get(
-        Registry $registry,
-        AvroIODatumWriter $datumWriter,
-        AvroIODatumReader $datumReader
-    ) : RecordSerializer {
-        $serializer = new RecordSerializer( $registry);
+    public static function get(Registry $registry, AvroIODatumWriter $datumWriter, AvroIODatumReader $datumReader) : RecordSerializer
+    {
+        $serializer = new RecordSerializer($registry);
 
         $writer = static function () use ($datumWriter) : callable {
-            $io     = avroStringIo('');
+            $io = avroStringIo('');
 
             return curryN(4, writeDatum)($datumWriter)($io);
         };
 
         $reader = static function () use ($datumReader) : callable {
-            $io     = avroStringIo('');
+            $io = avroStringIo('');
 
             return curryN(5, readDatum)($datumReader)($io);
         };

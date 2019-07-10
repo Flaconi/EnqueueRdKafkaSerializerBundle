@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\Tests\Avro;
 
@@ -6,11 +8,12 @@ use AvroIOBinaryEncoder;
 use AvroIODatumReader;
 use AvroIODatumWriter;
 use AvroSchema;
-use function bin2hex;
 use Flaconi\EnqueueRdKafkaSerializerBundle\Avro\RecordSerializerFactory;
 use FlixTech\SchemaRegistryApi\Registry;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use function bin2hex;
+use function hex2bin;
 
 /**
  * @covers \Flaconi\EnqueueRdKafkaSerializerBundle\Avro\RecordSerializerFactory
@@ -49,15 +52,14 @@ JSON;
 
         $serializer = RecordSerializerFactory::get($this->registry->reveal(), $this->writer->reveal(), $this->reader->reveal());
 
-        self::assertSame('foobar', $serializer->decodeMessage(\hex2bin(self::HEX_BIN)));
-
+        self::assertSame('foobar', $serializer->decodeMessage(hex2bin(self::HEX_BIN)));
     }
 
     public function testFactoryGetWriter() : void
     {
-
-        $this->writer->write_data(Argument::any(), Argument::any(), Argument::that(function(AvroIOBinaryEncoder $avroIOBinaryEncoder) {
+        $this->writer->write_data(Argument::any(), Argument::any(), Argument::that(static function (AvroIOBinaryEncoder $avroIOBinaryEncoder) {
             $avroIOBinaryEncoder->write('test');
+
             return true;
         }))->shouldBeCalledOnce();
 
@@ -70,11 +72,9 @@ JSON;
 
     protected function setUp() : void
     {
-        $this->writer = $this->prophesize(AvroIODatumWriter::class);
-        $this->reader = $this->prophesize(AvroIODatumReader::class);
+        $this->writer   = $this->prophesize(AvroIODatumWriter::class);
+        $this->reader   = $this->prophesize(AvroIODatumReader::class);
         $this->registry = $this->prophesize(Registry::class);
-        $this->schema = AvroSchema::parse(self::SCHEMA_JSON);
+        $this->schema   = AvroSchema::parse(self::SCHEMA_JSON);
     }
-
-
 }

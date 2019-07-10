@@ -30,8 +30,10 @@ final class IODatumWriter extends AvroIODatumWriter
      * @return mixed
      *
      * @throws AvroException
-     * @throws AvroIOTypeException if $datum is invalid for $writers_schema
+     * @throws AvroIOTypeException
      * @throws AvroSchemaParseException
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
      */
     public function write_data($writers_schema, $datum, $encoder)
     {

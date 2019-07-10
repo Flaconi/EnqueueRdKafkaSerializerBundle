@@ -6,6 +6,8 @@ parameters:
         - Symfony\Component\HttpKernel\Bundle\Bundle
         - Symfony\Component\DependencyInjection\Extension\Extension
         - Flaconi\EnqueueRdKafkaSerializerBundle\Extension\ConverterExtension
+        - AvroIODatumWriter
+        - AvroIODatumReader
     level: 7
     paths:
         - %currentWorkingDirectory%
@@ -19,3 +21,9 @@ parameters:
         - '/Method Flaconi\\EnqueueRdKafkaSerializerBundle\\Extension\\.*ConverterExtension::isConvertible\(\) has parameter \$value with no typehint specified./'
         - '/Method Flaconi\\EnqueueRdKafkaSerializerBundle\\Extension\\.*ConverterExtension::convert\(\) has parameter \$value with no typehint specified./'
         - '/Method Flaconi\\EnqueueRdKafkaSerializerBundle\\Extension\\.*ConverterExtension::convert\(\) has no return typehint specified./'
+        -
+            message: '#Parameter \#1 \$writersSchema of method Flaconi\\EnqueueRdKafkaSerializerBundle\\Avro\\IODatumWriter::transformData\(\) expects AvroSchema, string given.#'
+            path: %currentWorkingDirectory%/Avro/IODatumWriter.php
+        -
+            message: '#Parameter \#\d+ \$[a-zA-Z_]+ \([a-zA-Z]+\) of method Flaconi\\EnqueueRdKafkaSerializerBundle\\Avro\\IODatumReader::read_data\(\) should be contravariant with parameter \$[a-zA-Z_]+ \(mixed\) of method AvroIODatumReader::read_data\(\)#'
+            path: %currentWorkingDirectory%/Avro/IODatumReader.php
