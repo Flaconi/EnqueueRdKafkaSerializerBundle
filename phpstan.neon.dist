@@ -1,6 +1,5 @@
 includes:
     - vendor/jangregor/phpstan-prophecy/src/extension.neon
-    - vendor/thecodingmachine/phpstan-safe-rule/phpstan-safe-rule.neon
 parameters:
     classesAllowedToBeExtended:
         - Symfony\Component\HttpKernel\Bundle\Bundle
