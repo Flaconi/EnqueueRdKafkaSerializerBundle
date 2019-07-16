@@ -113,23 +113,28 @@ JSON;
         self::assertEquals('c0f785c4a65a', bin2hex($io->string()));
     }
 
-    public function testWriteLongArray() : void
+    public function testWriteDateTimeArray() : void
     {
         $io = new AvroStringIO('');
 
         $encoder = new AvroIOBinaryEncoder($io);
+
+        $datum = (new DateTimeImmutable())
+            ->setDate(2019, 2, 28)
+            ->setTimezone(new DateTimeZone('UTC'))
+            ->setTime(13, 17, 32);
 
         $schema = <<<JSON
 {
 "type": "array",
 "items": {
     "name": "longValue",
-    "type": "long"
+    "type": "long", "logicalType": "timestamp-millis"
 }
 }
 JSON;
 
-        $this->writer->write_data(AvroSchema::parse($schema), [1551359852000], $encoder);
+        $this->writer->write_data(AvroSchema::parse($schema), [$datum], $encoder);
 
         self::assertEquals('02c0f785c4a65a00', bin2hex($io->string()));
     }
