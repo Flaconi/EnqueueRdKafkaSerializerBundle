@@ -26,3 +26,7 @@ parameters:
         -
             message: '#Parameter \#\d+ \$[a-zA-Z_]+ \([a-zA-Z]+\) of method Flaconi\\EnqueueRdKafkaSerializerBundle\\Avro\\IODatumReader::read_data\(\) should be contravariant with parameter \$[a-zA-Z_]+ \(mixed\) of method AvroIODatumReader::read_data\(\)#'
             path: %currentWorkingDirectory%/Avro/IODatumReader.php
+
+        -
+            message: '#Parameter \#\d+ \$writersSchema of method Flaconi\\EnqueueRdKafkaSerializerBundle\\Avro\\IODatumWriter::transformData\(\) expects AvroSchema, AvroName\|AvroSchema given.#'
+            path: %currentWorkingDirectory%/Avro/IODatumWriter.php
