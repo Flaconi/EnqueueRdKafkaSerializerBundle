@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\Avro;
 
+use AvroArraySchema;
 use AvroException;
 use AvroField;
 use AvroIOBinaryEncoder;
@@ -50,6 +51,14 @@ final class IODatumWriter extends AvroIODatumWriter
      */
     private function transformData(AvroSchema $writersSchema, $datum)
     {
+        if ($writersSchema instanceof AvroArraySchema) {
+            foreach ($datum as &$item) {
+                $item = $this->transformData($writersSchema->items(), $item);
+            }
+
+            return $datum;
+        }
+
         if ($writersSchema instanceof AvroUnionSchema) {
             foreach ($writersSchema->schemas() as $schema) {
                 $datum = $this->transformData($schema, $datum);
@@ -90,7 +99,10 @@ final class IODatumWriter extends AvroIODatumWriter
                         return pack('Z', $datum->isZero());
                     }
 
-                    $int = new BigInteger($datum->getUnscaledValue()->toInt());
+                    $scale = $writersSchema->extra_attributes()['scale'];
+
+                    $int = new BigInteger($datum->toScale($scale)->getUnscaledValue()->toInt());
+
                     $int->setPrecision(24);
 
                     return $int->toBytes();

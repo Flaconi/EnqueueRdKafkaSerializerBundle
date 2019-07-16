@@ -56,10 +56,10 @@ final class IODatumWriterTest extends TestCase
     public function getBigDecimals() : array
     {
         return [
-            [BigDecimal::ofUnscaledValue(-71900, 4), '06fee724'],
-            [BigDecimal::ofUnscaledValue(-35900, 4), '06ff73c4'],
+            [BigDecimal::ofUnscaledValue(-71900, 3), '06fee724'],
+            [BigDecimal::ofUnscaledValue(-35900, 3), '06ff73c4'],
             [BigDecimal::zero(), '0200'],
-            [BigDecimal::ofUnscaledValue(203600, 4), '06031b50'],
+            [BigDecimal::ofUnscaledValue(203600, 3), '06031b50'],
         ];
     }
 
@@ -111,6 +111,27 @@ JSON;
         $this->writer->write_data($schema, 1551359852000, $encoder);
 
         self::assertEquals('c0f785c4a65a', bin2hex($io->string()));
+    }
+
+    public function testWriteLongArray() : void
+    {
+        $io = new AvroStringIO('');
+
+        $encoder = new AvroIOBinaryEncoder($io);
+
+        $schema = <<<JSON
+{
+"type": "array",
+"items": {
+    "name": "longValue",
+    "type": "long"
+}
+}
+JSON;
+
+        $this->writer->write_data(AvroSchema::parse($schema), [1551359852000], $encoder);
+
+        self::assertEquals('02c0f785c4a65a00', bin2hex($io->string()));
     }
 
     public function testWriteLong() : void
