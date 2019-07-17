@@ -73,7 +73,7 @@ final class EnqueueRdKafkaSerializerExtension extends Extension
                 $readerDef = new Definition($avroConfig['avro_io_reader']);
                 $readerDef->setPublic(false);
 
-                $container->getDefinition(RecordSerializer::class)
+                $container->getDefinition('enqueue_rdkafka_serializer.record_serializer')
                     ->setArgument(1, $writerDef)
                     ->setArgument(2, $readerDef)
                     ->setArgument(3,
