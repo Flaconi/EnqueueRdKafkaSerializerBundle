@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="enqueue_rdkafka_serializer.avro_object_cache_adapter" class="FlixTech\SchemaRegistryApi\Registry\Cache\AvroObjectCacheAdapter" public="false" />
+
+        <service id="enqueue_rdkafka_serializer.cached_registry" class="FlixTech\SchemaRegistryApi\Registry\CachedRegistry" public="false">
+            <argument type="service" id="enqueue_rdkafka_serializer.promising_registry"/>
+            <argument type="service" id="enqueue_rdkafka_serializer.avro_object_cache_adapter"/>
+        </service>
+
+        <service id="enqueue_rdkafka_serializer.promising_registry" class="FlixTech\SchemaRegistryApi\Registry\PromisingRegistry" public="false" />
+
+        <service id="enqueue_rdkafka_serializer.record_serializer" class="FlixTech\AvroSerializer\Objects\RecordSerializer" public="false">
+            <argument type="service" id="enqueue_rdkafka_serializer.cached_registry"/>
+            <factory class="Flaconi\EnqueueRdKafkaSerializerBundle\Avro\RecordSerializerFactory" method="get"/>
+        </service>
+
+    </services>
+</container>

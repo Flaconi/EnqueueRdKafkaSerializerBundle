@@ -115,9 +115,32 @@ class EnqueueRdKafkaSerializerExtensionTest extends AbstractExtensionTestCase
         $this->load($config);
     }
 
+    public function testErrorAfterLoadingForAvroSerializerWithoutSchemaRegistry() : void
+    {
+        $config = [
+            'serializer' => [
+                'foo' => [
+                    'serializer' => AvroSerializer::class,
+                    'processor' => NullProcessor::class,
+                    'schema_name' => 'dummy-value',
+                ],
+            ],
+        ];
+
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Invalid configuration for path "enqueue_rdkafka_serializer.serializer.foo": When AvroSerializer is used the schema_name needs to be set');
+
+
+        $this->load($config);
+    }
+
     public function testCorrectParameterSetAfterLoadingForAvroSerializer() : void
     {
         $config = [
+            'avro' => [
+                'enabled' => true,
+                'schema_registry' => 'http://schmema-registry'
+            ],
             'serializer' => [
                 'foo' => [
                     'serializer' => AvroSerializer::class,
