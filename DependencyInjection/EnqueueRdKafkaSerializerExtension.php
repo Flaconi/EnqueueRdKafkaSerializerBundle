@@ -45,7 +45,7 @@ final class EnqueueRdKafkaSerializerExtension extends Extension
     }
 
     /**
-     * @param array<array<string>> $config
+     * @param array<array<array<string>>> $config
      */
     private function setSerializer(array $config, ContainerBuilder $container) : void
     {
@@ -60,9 +60,8 @@ final class EnqueueRdKafkaSerializerExtension extends Extension
                 $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
                 $loader->load('avro.xml');
 
-                $schemaRegistryClient = new Definition(Client::class);
+                $schemaRegistryClient = new Definition(Client::class, [['base_uri' => $avroConfig['schema_registry']]]);
                 $schemaRegistryClient->setPublic(false);
-                $schemaRegistryClient->setArgument(0, ['base_uri' => $avroConfig['schema_registry']]);
 
                 $container->getDefinition('enqueue_rdkafka_serializer.promising_registry')
                     ->setArgument(0, $schemaRegistryClient);
@@ -76,11 +75,12 @@ final class EnqueueRdKafkaSerializerExtension extends Extension
                 $container->getDefinition('enqueue_rdkafka_serializer.record_serializer')
                     ->setArgument(1, $writerDef)
                     ->setArgument(2, $readerDef)
-                    ->setArgument(3,
+                    ->setArgument(
+                        3,
                         [
                             RecordSerializer::OPTION_REGISTER_MISSING_SCHEMAS => $avroConfig['register_missing_schemas'],
                             RecordSerializer::OPTION_REGISTER_MISSING_SUBJECTS => $avroConfig['register_missing_subjects'],
-                        ]
+                        ],
                     );
 
                 break;

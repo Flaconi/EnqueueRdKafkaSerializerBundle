@@ -43,13 +43,16 @@ final class Configuration implements ConfigurationInterface
         };
 
         $isAvroSerializerWithMissingConfig = static function ($v) {
-            $isAvroConfigEnabled = array_key_exists('avro' ,$v) && array_key_exists('schema_registry', $v['avro']);
+            if (! array_key_exists('serializer', $v)) {
+                return false;
+            }
 
-            foreach($v['serializer'] as $key => $value) {
+            $isAvroConfigEnabled = array_key_exists('avro', $v) && array_key_exists('schema_registry', $v['avro']);
+
+            foreach ($v['serializer'] as $key => $value) {
                 if ($value['serializer'] === AvroSerializer::class) {
-                    return !$isAvroConfigEnabled;
+                    return ! $isAvroConfigEnabled;
                 }
-
             }
 
             return false;
@@ -59,7 +62,7 @@ final class Configuration implements ConfigurationInterface
             ->validate()
                 ->ifTrue($isAvroSerializerWithMissingConfig)
                 ->thenInvalid('When AvroSerializer is used avro schema registry needs to be set')
-                ->end()
+            ->end()
             ->children()
                 ->arrayNode('avro')
                     ->canBeEnabled()
@@ -106,9 +109,7 @@ final class Configuration implements ConfigurationInterface
                         ->thenInvalid('When AvroSerializer is used the schema_name needs to be set')
                     ->end()
                 ->end()
-
-            ->end()
-           ;
+            ->end();
     }
 
     private function addExtension(string $extensionName) : ArrayNodeDefinition
