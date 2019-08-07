@@ -8,6 +8,7 @@ use Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\AvroSerializer;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 use function Safe\sprintf;
 
 final class KafkaMessageSerializerPass implements CompilerPassInterface
@@ -30,11 +31,18 @@ final class KafkaMessageSerializerPass implements CompilerPassInterface
 
                 $serializerDefinition = null;
 
-                if ($config['serializer'] === AvroSerializer::class && ! $container->hasDefinition($config['serializer'])) {
+                if ($config['serializer'] === AvroSerializer::class && ! $container->hasDefinition(
+                    $config['serializer'],
+                )) {
                     $serializerDefinition = new Definition($config['serializer']);
-                    $serializerDefinition->setAutowired(true);
-                    $serializerDefinition->setAutoconfigured(true);
-                    $serializerDefinition->setArgument('$schemaName', $config['schema_name']);
+                    $serializerDefinition->setPublic(false);
+                    $serializerDefinition->setArguments(
+                        [
+                            new Reference('enqueue_rdkafka_serializer.record_serializer'),
+                            new Reference('enqueue_rdkafka_serializer.cached_registry'),
+                            $config['schema_name'],
+                        ],
+                    );
                 }
 
                 if ($serializerDefinition === null) {

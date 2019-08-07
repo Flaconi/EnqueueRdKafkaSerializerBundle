@@ -9,6 +9,7 @@ use Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\AvroSerializer;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @covers \Flaconi\EnqueueRdKafkaSerializerBundle\DependencyInjection\CompilerPass\KafkaMessageSerializerPass
@@ -48,9 +49,12 @@ class KafkaMessageSerializerPassTest extends AbstractCompilerPassTestCase
         $this->container->setDefinition('enqueue.transport.foo.context', $transport);
 
         $fooSerializer = new Definition(AvroSerializer::class);
-        $fooSerializer->setArgument('$schemaName', 'bar');
-        $fooSerializer->setAutoconfigured(true);
-        $fooSerializer->setAutowired(true);
+        $fooSerializer->setArguments([
+            new Reference('enqueue_rdkafka_serializer.record_serializer'),
+            new Reference('enqueue_rdkafka_serializer.cached_registry'),
+            'bar',
+        ]);
+        $fooSerializer->setPublic(false);
         $fooSerializer->addMethodCall('setProcessorName', ['FooProcessor']);
 
         $this->compile();

@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Flaconi\EnqueueRdKafkaSerializerBundle\Tests\DependencyInjection;
 
+use Flaconi\EnqueueRdKafkaSerializerBundle\Avro\IODatumReader;
+use Flaconi\EnqueueRdKafkaSerializerBundle\Avro\IODatumWriter;
 use Flaconi\EnqueueRdKafkaSerializerBundle\DependencyInjection\EnqueueRdKafkaSerializerExtension;
 use Flaconi\EnqueueRdKafkaSerializerBundle\Extension\BigDecimalConverterExtension;
 use Flaconi\EnqueueRdKafkaSerializerBundle\Extension\ImmutableDateTimeConverterExtension;
 use Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\AvroSerializer;
 use Flaconi\EnqueueRdKafkaSerializerBundle\Serializer\ProcessorSerializer;
+use FlixTech\AvroSerializer\Objects\RecordSerializer;
+use GuzzleHttp\Client;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Definition;
@@ -115,7 +119,7 @@ class EnqueueRdKafkaSerializerExtensionTest extends AbstractExtensionTestCase
         $this->load($config);
     }
 
-    public function testCorrectParameterSetAfterLoadingForAvroSerializer() : void
+    public function testErrorAfterLoadingForAvroSerializerWithoutSchemaRegistry() : void
     {
         $config = [
             'serializer' => [
@@ -127,7 +131,46 @@ class EnqueueRdKafkaSerializerExtensionTest extends AbstractExtensionTestCase
             ],
         ];
 
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Invalid configuration for path "enqueue_rdkafka_serializer": When AvroSerializer is used avro schema registry needs to be set');
+
         $this->load($config);
+    }
+
+    public function testCorrectParameterSetAfterLoadingForAvroSerializer() : void
+    {
+        $config = [
+            'avro' => [
+                'enabled' => true,
+                'schema_registry' => 'http://schmema-registry',
+            ],
+            'serializer' => [
+                'foo' => [
+                    'serializer' => AvroSerializer::class,
+                    'processor' => NullProcessor::class,
+                    'schema_name' => 'dummy-value',
+                ],
+            ],
+        ];
+
+        $this->load($config);
+
+        $schemaRegistryClient = new Definition(Client::class, [['base_uri' => 'http://schmema-registry']]);
+        $schemaRegistryClient->setPublic(false);
+
+        $writerDef = new Definition(IODatumWriter::class);
+        $writerDef->setPublic(false);
+
+        $readerDef = new Definition(IODatumReader::class);
+        $readerDef->setPublic(false);
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('enqueue_rdkafka_serializer.promising_registry', 0, $schemaRegistryClient);
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('enqueue_rdkafka_serializer.record_serializer', 1, $writerDef);
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('enqueue_rdkafka_serializer.record_serializer', 2, $readerDef);
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument('enqueue_rdkafka_serializer.record_serializer', 3, [
+            RecordSerializer::OPTION_REGISTER_MISSING_SCHEMAS => true,
+            RecordSerializer::OPTION_REGISTER_MISSING_SUBJECTS => false,
+        ]);
 
         $this->assertContainerBuilderHasParameter('enqueue_rdkafka_serializer.serializer', $config['serializer']);
     }

@@ -28,6 +28,9 @@
         },
         "IncrementInteger": {
             "ignore": ["Flaconi\\EnqueueRdKafkaSerializerBundle\\*\\IODatumWriter::transformLogicalType"]
+        },
+        "Break_": {
+            "ignore": ["Flaconi\\EnqueueRdKafkaSerializerBundle\\*\\EnqueueRdKafkaSerializerExtension::setSerializer"]
         }
     },
     "phpUnit": {
